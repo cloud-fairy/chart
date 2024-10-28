@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Release.Name}}-controller
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Release.Name }}-controller
+spec:
+  replicas: 1
+  serviceName: {{ .Release.Name }}-controller
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-controller
+  volumeClaimTemplates:
+  - metadata:
+      name: {{ .Release.Name }}-controller-pvc
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 3Gi
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-controller
+    spec:
+      serviceAccountName: {{ .Release.Name }}-serviceaccount
+      containers:
+      - name: {{ .Release.Name }}-controller
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        volumeMounts:
+        - name: {{ .Release.Name }}-controller-pvc
+          mountPath: {{ .Values.storage.mountPath }}
+        env:
+        - name: API_SERVER_URL
+          value: {{ .Values.env.kubernetesUrl }}
+        - name: SERVICE_ACCOUNT_FOLDER
+          value: /var/run/secrets/kubernetes.io/serviceaccount
+        - name: SERVER_PORT
+          value: "1337"
+        - name: STORAGE_PATH
+          value: {{ .Values.storage.mountPath }}
+        ports:
+        - containerPort: 1337
+          protocol: TCP
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "0.5"
+          limits:
+            memory: "1024Mi"
+            cpu: "1"
+---
