@@ -1,0 +1,23 @@
+apiVersion: v1
+entries:
+  cloudfairy-controller:
+  - annotations:
+      category: Infrastructure
+      images: |
+        - "eavichay/cloudfairy:main"
+      licenses: AAR
+    apiVersion: v2
+    appVersion: 1.0.0
+    created: "2024-10-29T00:18:43.840525+02:00"
+    description: A Helm chart for Cloudfairy kubernetes controller
+    digest: 8f2e08cfbce0c04d9a9d71c159a7a7bffc49ebe26a4cb162992b262f04decb11
+    home: https://cloudfairy.dev
+    maintainers:
+    - email: eavichay@gmail.com
+      name: Eyal Avichay
+    name: cloudfairy-controller
+    type: application
+    urls:
+    - https://cloud-fairy.github.io/chart/cloudfairy-controller-0.1.0.tgz
+    version: 0.1.0
+generated: "2024-10-29T00:18:43.839754+02:00"
